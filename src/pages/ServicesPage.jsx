@@ -2,23 +2,7 @@ import { useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import {
   BadgeCheck,
-  BarChart3,
-  Building2,
-  CalendarDays,
-  FileText,
-  Globe2,
-  Landmark,
-  LayoutPanelTop,
   Megaphone,
-  MonitorSmartphone,
-  Newspaper,
-  Palette,
-  SearchCheck,
-  Share2,
-  Sparkles,
-  Store,
-  Video,
-  MoreHorizontal,
 } from 'lucide-react';
 
 /* ─── Fade-up variant for scroll reveals ─── */
@@ -48,10 +32,23 @@ function Reveal({ children, custom = 0, className = '' }) {
   );
 }
 
+const bgBranding = 'https://picsum.photos/seed/branding/600/400';
+const bgOutdoor = 'https://picsum.photos/seed/outdoor/600/400';
+const bgPrint = 'https://picsum.photos/seed/print/600/400';
+const bgDigital = 'https://picsum.photos/seed/digital/600/400';
+const bgSocial = 'https://picsum.photos/seed/social/600/400';
+const bgWeb = 'https://picsum.photos/seed/web/600/400';
+const bgProduction = 'https://picsum.photos/seed/production/600/400';
+const bgRealestate = 'https://picsum.photos/seed/realestate/600/400';
+const bgEvents = 'https://picsum.photos/seed/events/600/400';
+const bgCorporate = 'https://picsum.photos/seed/corporate/600/400';
+const bgStrategy = 'https://picsum.photos/seed/strategy/600/400';
+const bgPolitical = 'https://picsum.photos/seed/political/600/400';
+
 /* ─── Services data ─── */
 const SERVICES = [
   {
-    Icon: Palette,
+    bg: bgBranding,
     title: 'Branding & Identity',
     kicker: 'Memorable. Differentiated. Built for growth.',
     description:
@@ -67,7 +64,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: Building2,
+    bg: bgOutdoor,
     title: 'Outdoor Advertising',
     kicker: 'High-impact OOH media for reach and recall.',
     description:
@@ -86,7 +83,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: Newspaper,
+    bg: bgPrint,
     title: 'Print Advertising',
     kicker: 'Four decades of print media expertise.',
     description:
@@ -110,7 +107,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: BarChart3,
+    bg: bgDigital,
     title: 'Digital Marketing',
     kicker: 'Performance-led growth across digital channels.',
     description:
@@ -128,7 +125,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: Share2,
+    bg: bgSocial,
     title: 'Social Media & Content',
     kicker: 'Content that builds communities and relevance.',
     description:
@@ -145,7 +142,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: LayoutPanelTop,
+    bg: bgWeb,
     title: 'Website & UI/UX',
     kicker: 'Digital experiences built for conversion.',
     description:
@@ -161,7 +158,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: Video,
+    bg: bgProduction,
     title: 'Production & Media',
     kicker: 'Visual stories from concept to final production.',
     description:
@@ -178,7 +175,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: Store,
+    bg: bgRealestate,
     title: 'Real Estate & Retail',
     kicker: 'Launch, visibility, footfall, and enquiries.',
     description:
@@ -196,7 +193,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: CalendarDays,
+    bg: bgEvents,
     title: 'Events & Activations',
     kicker: 'Experiences that bring brands closer to people.',
     description:
@@ -213,7 +210,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: FileText,
+    bg: bgCorporate,
     title: 'Corporate Communication & PR',
     kicker: 'Communication that builds trust and credibility.',
     description:
@@ -230,7 +227,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: SearchCheck,
+    bg: bgStrategy,
     title: 'Strategy & Research',
     kicker: 'Insight-driven planning for better decisions.',
     description:
@@ -247,7 +244,7 @@ const SERVICES = [
     ],
   },
   {
-    Icon: Landmark,
+    bg: bgPolitical,
     title: 'Political & Public Campaigns',
     kicker: 'Public communication with clarity and reach.',
     description:
@@ -276,7 +273,7 @@ function isTouchLike() {
 function ServiceCard({ service, index }) {
   const [isOpen, setIsOpen] = useState(false);
   const touchDevice = isTouchLike();
-  const { Icon, title, kicker, description, tags, services, expertise } = service;
+  const { bg, title, kicker, description, tags, services, expertise } = service;
 
   // Pick up to 6 items to show inside the expanded panel
   const detailItems = expertise
@@ -310,32 +307,22 @@ function ServiceCard({ service, index }) {
       aria-label={`${title} service card`}
     >
       {/* ── Card image area (icon + grid pattern) ── */}
-      <div className="wf-card__media">
-        <div className="wf-card__media-grid" aria-hidden="true" />
-        <div className="wf-card__icon-wrap">
-          <Icon size={32} strokeWidth={1.5} />
-        </div>
-        <span className="wf-card__number">{String(index + 1).padStart(2, '0')}</span>
-      </div>
+      <div
+  className="wf-card__media"
+  style={{
+    backgroundImage: `url(${bg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
+>
+  <div className="wf-card__media-overlay" />
+</div>
 
       {/* ── Card body ── */}
       <div className="wf-card__body">
         {/* Always-visible header */}
         <div className="wf-card__header">
-          <div className="wf-card__meta">
-            <span>Integrated Service</span>
-            <span className="wf-card__dot" />
-            <span className="wf-card__status">
-              <span className="wf-card__status-dot" aria-hidden="true" />
-              Active
-            </span>
-          </div>
-          <div className="wf-card__title-row">
-            <h3 className="wf-card__title">{title}</h3>
-            <button className="wf-card__more" aria-label="More options">
-              <MoreHorizontal size={18} />
-            </button>
-          </div>
+          <h3 className="wf-card__title">{title}</h3>
           <p className="wf-card__kicker">{kicker}</p>
         </div>
 
@@ -369,11 +356,6 @@ function ServiceCard({ service, index }) {
           {tags.map((tag) => (
             <span key={tag} className="wf-card__tag">{tag}</span>
           ))}
-        </div>
-        <div className="wf-card__actions" aria-label={`${services.length} services`}>
-          <span><Sparkles size={12} /> {services.length}</span>
-          <span><Globe2 size={12} /></span>
-          <span><MonitorSmartphone size={12} /></span>
         </div>
       </div>
     </motion.article>
