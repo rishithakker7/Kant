@@ -275,6 +275,7 @@ function isTouchLike() {
 /* ─── WorkflowBuilderCard adapted to KANT CSS ─── */
 function ServiceCard({ service, index }) {
   const [isOpen, setIsOpen] = useState(false);
+  const touchDevice = isTouchLike();
   const { Icon, title, kicker, description, tags, services, expertise } = service;
 
   // Pick up to 6 items to show inside the expanded panel
@@ -282,18 +283,31 @@ function ServiceCard({ service, index }) {
     ? [...services.slice(0, 4), ...expertise.slice(0, 2)]
     : services.slice(0, 6);
 
+  const toggleOpen = () => setIsOpen((p) => !p);
+  const openOnHover = () => { if (!touchDevice) setIsOpen(true); };
+  const closeOnHover = () => { if (!touchDevice) setIsOpen(false); };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleOpen();
+    }
+  };
+
   return (
     <motion.article
       className={`wf-card${isOpen ? ' wf-card--open' : ''}`}
-      onHoverStart={() => { if (!isTouchLike()) setIsOpen(true); }}
-      onHoverEnd={() => { if (!isTouchLike()) setIsOpen(false); }}
-      onClick={() => { if (isTouchLike()) setIsOpen((p) => !p); }}
-      onFocus={() => { if (!isTouchLike()) setIsOpen(true); }}
-      onBlur={() => { if (!isTouchLike()) setIsOpen(false); }}
+      role="button"
+      onHoverStart={openOnHover}
+      onHoverEnd={closeOnHover}
+      onClick={() => { if (touchDevice) toggleOpen(); }}
+      onFocus={openOnHover}
+      onBlur={closeOnHover}
+      onKeyDown={handleKeyDown}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
       tabIndex={0}
       aria-expanded={isOpen}
+      aria-label={`${title} service card`}
     >
       {/* ── Card image area (icon + grid pattern) ── */}
       <div className="wf-card__media">

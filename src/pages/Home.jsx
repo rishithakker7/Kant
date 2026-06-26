@@ -9,7 +9,7 @@ import {
   Star,
   Megaphone,
 } from "lucide-react";
-import ServicesWheel from "/Users/goat/Kant/Kant/src/components/ServicesWheel.jsx";
+import ServicesWheel from "../components/ServicesWheel.jsx";
 
 /* ───────────────── ANIMATIONS ───────────────── */
 
