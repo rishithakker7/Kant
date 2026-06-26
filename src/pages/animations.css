@@ -1,0 +1,152 @@
+/* ============================================
+   KANT ADVERTISING — ANIMATION ADDITIONS
+   Step 2: Scroll-shrink navbar + button glow
+   ============================================ */
+
+/* ── NAVBAR SCROLL STATE ─────────────────────── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar--scrolled {
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* ── BUTTON GLOW / INTERACTION ───────────────── */
+.hero__cta {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.12);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.hero__cta:hover::after {
+  opacity: 1;
+}
+
+.btn--outline-white {
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+.btn--outline-white:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── SERVICE CARD HOVER ──────────────────────── */
+.service-card {
+  transition: transform 0.25s ease;
+  padding: 0.5rem;
+  border-radius: 2px;
+}
+
+.svc-card {
+  border-radius: 2px;
+}
+
+/* ── HIGHLIGHTS ITEM HOVER ───────────────────── */
+.highlights__item {
+  cursor: default;
+  transition: color 0.2s ease;
+}
+
+/* ── PROMO CARD ──────────────────────────────── */
+.promo-card {
+  border-radius: 2px;
+  transition: transform 0.2s ease;
+}
+
+
+/* ── ABOUT PAGE ANIMATIONS ───────────────────── */
+
+/* Banner title fade-in up */
+.page-banner__title {
+  animation: bannerFadeUp 0.7s ease both;
+}
+
+.page-banner__subtitle {
+  animation: bannerFadeUp 0.7s 0.15s ease both;
+}
+
+.page-banner__image {
+  animation: bannerFadeUp 0.7s 0.25s ease both;
+}
+
+@keyframes bannerFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Value card stagger on hover */
+.value-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* KANT letter pulse on hover */
+.kant-card__letter {
+  transition: transform 0.2s ease, color 0.2s ease;
+  display: inline-block;
+}
+
+.kant-card:hover .kant-card__letter {
+  transform: scale(1.08);
+}
+
+/* Story section image placeholder shimmer */
+.image-placeholder--square {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-placeholder--square::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(229,0,15,0.05) 50%,
+    transparent 70%
+  );
+  animation: shimmer 2.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+
+/* ── SERVICES PAGE ANIMATIONS ────────────────── */
+
+/* Stagger svc-cards on load via Reveal, icon spring handled by framer */
+.svc-card {
+  transition: background 0.22s ease;
+}
+
+.svc-card:hover {
+  background: #fafafa;
+}
+
+/* Promo card icon wiggle is handled by framer-motion in JSX */
+/* Ensure icon bg transition is smooth */
+.svc-card__icon {
+  transition: background 0.22s ease, transform 0.22s ease;
+}
