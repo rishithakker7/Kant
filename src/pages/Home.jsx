@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, animate } from "framer-motion";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 import {
   Calendar,
   RefreshCw,
@@ -115,7 +116,7 @@ export default function Home() {
             </div>
           </div>
           <div className="hero__brand">
-            <img src="/src/assets/logo.png" alt="KANT Logo" className="hero__logo" />
+            <img src={logo} alt="KANT Logo" className="hero__logo" />
           </div>
         </div>
       </section>
