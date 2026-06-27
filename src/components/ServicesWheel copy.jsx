@@ -256,12 +256,12 @@ function WheelNav({ activeIndex, onSelect }) {
             <g key={svc.id} onClick={() => goTo(index)} style={{ cursor: "pointer" }}>
               <motion.path
                 d={d}
-                fill={isActive ? "#E5000F" : "#161616"}
-                stroke={isActive ? "#E5000F" : "#000000"}
+                fill={isActive ? "#E5000F" : "#e8e8e8"}
+                stroke={isActive ? "#E5000F" : "#d0d0d0"}
                 strokeWidth={isActive ? 0 : 1}
                 animate={{
                   scale: isActive ? 1.045 : 1,
-                  opacity: isActive ? 1 : 0.9,
+                  opacity: isActive ? 1 : 0.72,
                 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 style={{ transformOrigin: `${CX}px ${CY}px` }}
@@ -338,7 +338,7 @@ function CounterLabel({ svc, isActive, cx, cy, wheelRotation }) {
             alignItems: "center",
             justifyContent: "center",
             gap: "7px",
-            color: isActive ? "#ffffff" : "rgba(255,255,255,0.82)",
+            color: isActive ? "#ffffff" : "rgba(0,0,0,0.55)",
             textAlign: "center",
           }}
         >

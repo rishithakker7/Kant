@@ -3,16 +3,17 @@
    Step 2: Scroll-shrink navbar + button glow
    ============================================ */
 
-/* ── NAVBAR SCROLL STATE ─────────────────────── */
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+/* ── TUBELIGHT NAVBAR — INTERACTION POLISH ───── */
+.tubelight-nav__item {
+  transition: color 0.25s ease, transform 0.2s ease;
 }
 
-.navbar--scrolled {
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.18);
+.tubelight-nav__item:hover {
+  transform: translateY(-1px);
+}
+
+.tubelight-nav__lamp-blur {
+  transition: opacity 0.3s ease;
 }
 
 /* ── BUTTON GLOW / INTERACTION ───────────────── */

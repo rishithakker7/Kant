@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import {
   BadgeCheck,
-  Megaphone,
 } from 'lucide-react';
 
 /* ─── Fade-up variant for scroll reveals ─── */
@@ -403,33 +402,6 @@ export default function ServicesPage() {
               </Reveal>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── CLOSING CTA ── */}
-      <section className="section services-cta-section">
-        <div className="container">
-          <Reveal>
-            <motion.div
-              className="promo-card"
-              whileHover={{ scale: 1.01 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-            >
-              <motion.div
-                className="promo-card__icon"
-                animate={{ rotate: [0, -8, 8, -4, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3 }}
-              >
-                <Megaphone size={36} />
-              </motion.div>
-              <div>
-                <h3 className="promo-card__title">BUILD A 360° CAMPAIGN</h3>
-                <p className="promo-card__desc">
-                  Strategy, media, creative, execution, and reporting — aligned under one experienced team.
-                </p>
-              </div>
-            </motion.div>
-          </Reveal>
         </div>
       </section>
 

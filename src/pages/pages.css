@@ -1053,6 +1053,7 @@
 
 .services-flow-section {
   padding-top: 50px;
+  padding-bottom: 90px;
 }
 
 .services-flow-head {
@@ -1363,7 +1364,7 @@
 /* ── BANNER ──────────────────────────────────── */
 
 .contact-page .page-banner--dark {
-  padding: 60px 0 50px;
+  padding: 100px 0 50px;
 }
 
 .contact-page .page-banner__inner--center {
@@ -2123,4 +2124,166 @@
   .vmc-card__overlay {
     transition: none;
   }
+}
+
+/* ============================================
+   TUBELIGHT NAVBAR
+   ============================================ */
+
+.tubelight-nav {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+}
+
+.tubelight-nav__pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #e5000f 0%, #c4000d 100%);
+  box-shadow: 0 12px 32px rgba(229, 0, 15, 0.32), 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+.tubelight-nav__item {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 24px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tubelight-nav__item:hover {
+  color: #fff;
+}
+
+.tubelight-nav__item--active {
+  color: var(--color-accent, #e5000f);
+}
+
+.tubelight-nav__item--active:hover {
+  color: var(--color-accent, #e5000f);
+}
+
+.tubelight-nav__icon {
+  display: none;
+}
+
+.tubelight-nav__glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.tubelight-nav__lamp {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--color-accent, #e5000f);
+}
+
+.tubelight-nav__lamp-blur {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgba(229, 0, 15, 0.45);
+  filter: blur(8px);
+}
+
+.tubelight-nav__lamp-blur--wide {
+  top: -10px;
+  width: 44px;
+  height: 22px;
+  opacity: 0.45;
+}
+
+.tubelight-nav__lamp-blur--mid {
+  top: -6px;
+  width: 30px;
+  height: 18px;
+  opacity: 0.6;
+}
+
+.tubelight-nav__lamp-blur--core {
+  top: -2px;
+  width: 14px;
+  height: 12px;
+  opacity: 0.85;
+}
+
+@media (max-width: 640px) {
+  .tubelight-nav {
+    top: 14px;
+  }
+
+  .tubelight-nav__pill {
+    gap: 2px;
+    padding: 5px;
+  }
+
+  .tubelight-nav__item {
+    padding: 11px 16px;
+  }
+
+  .tubelight-nav__label {
+    display: none;
+  }
+
+  .tubelight-nav__icon {
+    display: inline-flex;
+  }
+}
+
+/* ── INVERTED VARIANT — Home page, over the red hero ── */
+
+.tubelight-nav--inverted .tubelight-nav__pill {
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.tubelight-nav--inverted .tubelight-nav__item {
+  color: rgba(229, 0, 15, 0.7);
+}
+
+.tubelight-nav--inverted .tubelight-nav__item:hover {
+  color: var(--color-accent, #e5000f);
+}
+
+.tubelight-nav--inverted .tubelight-nav__item--active,
+.tubelight-nav--inverted .tubelight-nav__item--active:hover {
+  color: #ffffff;
+}
+
+.tubelight-nav--inverted .tubelight-nav__glow {
+  background: var(--color-accent, #e5000f);
+}
+
+.tubelight-nav--inverted .tubelight-nav__lamp {
+  background: #ffffff;
+}
+
+.tubelight-nav--inverted .tubelight-nav__lamp-blur {
+  background: rgba(255, 255, 255, 0.55);
 }

@@ -112,14 +112,33 @@ export default function Contact() {
 
             <h3 className="section-label accent find-us">FIND US</h3>
 
-            {/* Map placeholder */}
+            {/* Embedded map */}
             <div className="map-placeholder">
-              <div className="map-placeholder__inner">
-                <span className="map-placeholder__pin">📍</span>
-                <p>KANT Advertising Pvt. Ltd.</p>
-                <p style={{ fontSize: '0.8rem', color: '#888' }}>Mulund West, Mumbai</p>
-              </div>
+              <iframe
+                title="KANT Advertising location on Google Maps"
+                src="https://www.google.com/maps?q=19.1763238,72.9600502&z=17&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
+            <a
+              href="https://maps.app.goo.gl/a6y8JTgq9kwxCoxx9"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                marginTop: '10px',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                color: '#e5000f',
+                textDecoration: 'none',
+              }}
+            >
+              Open in Google Maps →
+            </a>
           </div>
 
         </div>
