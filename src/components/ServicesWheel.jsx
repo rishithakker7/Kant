@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   motion,
   useMotionValue,
@@ -134,14 +135,6 @@ function ContentPanel({ service }) {
       </div>
       <h3 className="sw-panel__title">{title}</h3>
       <p className="sw-panel__desc">{desc}</p>
-      <motion.button
-        className="sw-panel__cta"
-        whileHover={{ x: 6 }}
-        transition={{ type: "spring", stiffness: 380, damping: 22 }}
-      >
-        Learn More
-        <ArrowRight size={16} strokeWidth={2} />
-      </motion.button>
     </motion.div>
   );
 }
@@ -387,6 +380,14 @@ export default function ServicesWheel() {
             <AnimatePresence mode="wait">
               <ContentPanel key={activeIndex} service={services[activeIndex]} />
             </AnimatePresence>
+            <Link
+              to="/services"
+              className="sw-panel__cta sw-panel__cta--static"
+              onClick={() => window.scrollTo(0, 0)}
+            >
+              Explore All Services
+              <ArrowRight size={16} strokeWidth={2} />
+            </Link>
           </div>
         </div>
       </div>

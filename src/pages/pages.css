@@ -2050,7 +2050,9 @@ a.contact-info-item:hover {
   position: relative;
   min-height: 360px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 /* ── CONTENT PANEL ── */
@@ -2117,11 +2119,18 @@ a.contact-info-item:hover {
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color 0.2s ease;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.sw-panel__cta--static {
+  margin-top: 36px;
+  padding: 0 8px;
 }
 
 .sw-panel__cta:hover {
   color: #c4000d;
+  transform: translateX(6px);
 }
 
 /* ── RESPONSIVE ── */
@@ -2152,7 +2161,7 @@ a.contact-info-item:hover {
   }
   .sw-panel-wrap {
     min-height: auto;
-    justify-content: center;
+    align-items: center;
     width: 100%;
   }
   .sw-panel {
@@ -2162,6 +2171,10 @@ a.contact-info-item:hover {
   }
   .sw-panel__desc {
     max-width: 100%;
+  }
+  .sw-panel__cta--static {
+    padding: 0;
+    margin-top: 28px;
   }
 }
 
