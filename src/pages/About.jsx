@@ -162,8 +162,6 @@ export default function About() {
               Our strength lies in our deep understanding of print across India, strong media
               relationships, strategic thinking and prompt execution. Over the years, we have
               built long-term relationships with clients who trust us to deliver, every single time.
-            </p>
-            <p>
               Our longevity reflects consistency, credibility, execution, and client trust.
             </p>
           </div>

@@ -108,7 +108,7 @@ export default function Home() {
         <div className="container hero__inner">
           <div className="hero__left">
             <h1 className="hero__headline">
-              KILLER <br />ADS.<br />NO TIMEPASS.<br />
+              KILLER <br />ADS.<br />NO<br />TIMEPASS.
             </h1>
             <div className="hero__cta-group">
               <Link to="/services" className="hero__cta">EXPLORE SERVICES →</Link>

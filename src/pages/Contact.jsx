@@ -1,6 +1,35 @@
 import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Phone, Mail, Globe, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, Globe, MapPin, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
+
+/* ════════════════════════════════════════════════════════════════
+   EMAIL CONFIG
+   ────────────────────────────────────────────────────────────────
+   To send the contact form to a DIFFERENT inbox in future, change
+   ONLY the line below (RECIPIENT_EMAIL). Nothing else needs to
+   change in this file.
+
+   One-time setup required (5 min, free, no backend):
+   1. Create an account at https://www.emailjs.com
+   2. Email Services → Add a service (connect Gmail/Outlook/etc.)
+      → copy the Service ID into EMAILJS_SERVICE_ID below.
+   3. Email Templates → Create a template. In the template's
+      "To Email" field, type:  {{to_email}}
+      In the body, use variables: {{name}} {{email}}
+      {{phone}} {{message}}
+      → copy the Template ID into EMAILJS_TEMPLATE_ID below.
+   4. Account → General → copy your Public Key into
+      EMAILJS_PUBLIC_KEY below.
+
+   Once that's done, RECIPIENT_EMAIL is the only thing you'll
+   ever need to touch to redirect where submissions go.
+   ════════════════════════════════════════════════════════════════ */
+const RECIPIENT_EMAIL = 'vidhithakker7@gmail.com';
+
+const EMAILJS_SERVICE_ID = 'service_rztn2wd';
+const EMAILJS_TEMPLATE_ID = 'template_330i5q2';
+const EMAILJS_PUBLIC_KEY = 'QVkwXaZttWjFVEh3a';
 
 /* ─── Scroll reveal wrapper ─── */
 const fadeUp = {
@@ -38,14 +67,44 @@ const CONTACT_DETAILS = [
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-    setForm({ name: '', email: '', phone: '', message: '' });
-    setTimeout(() => setSubmitted(false), 4000);
+  const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.phone || !form.message) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+
+    setError('');
+    setSending(true);
+
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          to_email: RECIPIENT_EMAIL,
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          message: form.message,
+        },
+        { publicKey: EMAILJS_PUBLIC_KEY }
+      );
+
+      setSubmitted(true);
+      setForm({ name: '', email: '', phone: '', message: '' });
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      setError("Something went wrong sending your message. Please try again, or email us directly.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -131,12 +190,28 @@ export default function Contact() {
             <motion.button
               className="btn btn--accent"
               onClick={handleSubmit}
+              disabled={sending}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.2 }}
             >
-              SEND MESSAGE <Send size={15} strokeWidth={2.4} />
+              {sending ? 'SENDING…' : 'SEND MESSAGE'} <Send size={15} strokeWidth={2.4} />
             </motion.button>
+
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  className="form-error"
+                  initial={{ opacity: 0, y: -8, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                  exit={{ opacity: 0, y: -8, height: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                >
+                  <AlertCircle size={17} strokeWidth={2.3} />
+                  <span>{error}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <AnimatePresence>
               {submitted && (
