@@ -44,9 +44,14 @@ function Reveal({ children, custom = 0, className = '' }) {
   );
 }
 
-// No local asset yet for Political & Public Campaigns — swap this for the
-// real image once you have one (and import it the same way as the others above).
-const bgPolitical = 'https://picsum.photos/seed/political/600/400';
+// No local asset yet for Political & Public Campaigns — this uses a CSS
+// gradient instead of a remote placeholder image so the card never depends
+// on an external network request. Swap in a real photo any time by
+// importing it the same way as the others above and reassigning this.
+const bgPolitical = 'linear-gradient(135deg, #1a0305 0%, #3a0508 55%, #161616 100%)';
+
+const isGradient = (bg) => typeof bg === 'string' && bg.startsWith('linear-gradient');
+const bgImageStyle = (bg) => ({ backgroundImage: isGradient(bg) ? bg : `url(${bg})` });
 
 /* ─── Services data ─── */
 const SERVICES = [
@@ -264,26 +269,21 @@ const SERVICES = [
   },
 ];
 
-/* ─── Touch detection ─── */
-function isTouchLike() {
-  return (
-    typeof window !== 'undefined' &&
-    window.matchMedia('(hover: none), (pointer: coarse)').matches
-  );
-}
+/* ─── Touch detection — evaluated once at module level, not per render ─── */
+const IS_TOUCH = typeof window !== 'undefined' &&
+  window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
 /* ─── ServiceCard — hover preview + click to open full modal ─── */
 function ServiceCard({ service, onOpen }) {
   const [isOpen, setIsOpen] = useState(false);
-  const touchDevice = isTouchLike();
   const { bg, title, kicker, description, tags, services, expertise } = service;
 
   const detailItems = expertise
     ? [...services.slice(0, 4), ...expertise.slice(0, 2)]
     : services.slice(0, 6);
 
-  const openOnHover = () => { if (!touchDevice) setIsOpen(true); };
-  const closeOnHover = () => { if (!touchDevice) setIsOpen(false); };
+  const openOnHover = () => { if (!IS_TOUCH) setIsOpen(true); };
+  const closeOnHover = () => { if (!IS_TOUCH) setIsOpen(false); };
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -312,7 +312,7 @@ function ServiceCard({ service, onOpen }) {
       <div
         className="wf-card__media"
         style={{
-          backgroundImage: `url(${bg})`,
+          ...bgImageStyle(bg),
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -416,7 +416,7 @@ function ServiceModal({ service, onClose }) {
         <div
           className="svc-modal__media"
           style={{
-            backgroundImage: `url(${bg})`,
+            ...bgImageStyle(bg),
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

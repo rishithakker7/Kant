@@ -165,13 +165,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 48px;
-  align-items: center;
-}
-
-.stats-banner__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
   align-items: stretch;
 }
 
@@ -1293,7 +1286,7 @@
   }
 
   .wf-card__media {
-    height: 96px;
+    height: 170px;
   }
 }
 
@@ -2051,8 +2044,9 @@ a.contact-info-item:hover {
   min-height: 360px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
 }
 
 /* ── CONTENT PANEL ── */
@@ -2119,18 +2113,11 @@ a.contact-info-item:hover {
   border: none;
   padding: 0;
   cursor: pointer;
-  text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.sw-panel__cta--static {
-  margin-top: 36px;
-  padding: 0 8px;
+  transition: color 0.2s ease;
 }
 
 .sw-panel__cta:hover {
   color: #c4000d;
-  transform: translateX(6px);
 }
 
 /* ── RESPONSIVE ── */
@@ -2161,8 +2148,11 @@ a.contact-info-item:hover {
   }
   .sw-panel-wrap {
     min-height: auto;
+    justify-content: center;
     align-items: center;
     width: 100%;
+    flex-direction: column;
+    gap: 28px;
   }
   .sw-panel {
     align-items: center;
@@ -2171,10 +2161,6 @@ a.contact-info-item:hover {
   }
   .sw-panel__desc {
     max-width: 100%;
-  }
-  .sw-panel__cta--static {
-    padding: 0;
-    margin-top: 28px;
   }
 }
 
@@ -2490,6 +2476,7 @@ a.contact-info-item:hover {
   background: linear-gradient(135deg, #e5000f 0%, #c4000d 100%);
   box-shadow: 0 12px 32px rgba(229, 0, 15, 0.32), 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: background 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
 }
 
 .tubelight-nav__item {
@@ -2507,6 +2494,7 @@ a.contact-info-item:hover {
   color: rgba(255, 255, 255, 0.78);
   text-decoration: none;
   white-space: nowrap;
+  z-index: 1;
 }
 
 .tubelight-nav__item:hover {
@@ -2527,10 +2515,11 @@ a.contact-info-item:hover {
 
 .tubelight-nav__glow {
   position: absolute;
-  inset: 0;
-  z-index: -1;
+  top: 6px;
+  z-index: 0;
   border-radius: 999px;
   background: #fff;
+  pointer-events: none;
 }
 
 .tubelight-nav__lamp {

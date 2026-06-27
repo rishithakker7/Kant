@@ -111,6 +111,29 @@ function VMCard({ card }) {
   );
 }
 
+const CORE_VALUES = [
+  {
+    icon: <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+    title: 'INTEGRITY',
+    desc: 'Honest, transparent and ethical in everything we do.',
+  },
+  {
+    icon: <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
+    title: 'KNOWLEDGE',
+    desc: 'Deep understanding of media and markets.',
+  },
+  {
+    icon: <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    title: 'COMMITMENT',
+    desc: 'Dedicated to client success and long-term partnerships.',
+  },
+  {
+    icon: <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+    title: 'SPEED',
+    desc: 'Prompt service and timely execution always.',
+  },
+];
+
 function VisionMissionCards() {
   return (
     <section className="section vmc-section">
@@ -182,28 +205,7 @@ export default function About() {
         <div className="container">
           <span className="section-label accent center">Our Core Values</span>
           <div className="values-grid">
-            {[
-              {
-                icon: <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
-                title: 'INTEGRITY',
-                desc: 'Honest, transparent and ethical in everything we do.',
-              },
-              {
-                icon: <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
-                title: 'KNOWLEDGE',
-                desc: 'Deep understanding of media and markets.',
-              },
-              {
-                icon: <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-                title: 'COMMITMENT',
-                desc: 'Dedicated to client success and long-term partnerships.',
-              },
-              {
-                icon: <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-                title: 'SPEED',
-                desc: 'Prompt service and timely execution always.',
-              },
-            ].map((val, i) => (
+            {CORE_VALUES.map((val, i) => (
               <div className="value-card" key={i}>
                 <div className="value-card__icon">{val.icon}</div>
                 <h4 className="value-card__title">{val.title}</h4>

@@ -201,15 +201,21 @@ function WheelNav({ activeIndex, onSelect }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Autoplay
+  // Keep a ref so the interval callback always sees current activeIndex
+  // without needing to be re-created every rotation
+  const activeIndexRef = useRef(activeIndex);
+  useEffect(() => { activeIndexRef.current = activeIndex; }, [activeIndex]);
+
+  // Autoplay — created once, never torn down
   useEffect(() => {
     const id = setInterval(() => {
       if (!isPaused.current) {
-        goTo((activeIndex + 1) % TOTAL);
+        goTo((activeIndexRef.current + 1) % TOTAL);
       }
     }, AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, [activeIndex, goTo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div

@@ -40,8 +40,6 @@ const scaleIn = {
   },
 };
 
-const MotionLink = motion(Link);
-
 /* ───────────────── REVEAL ───────────────── */
 
 function Reveal({ children, variants = fadeUp, className = "" }) {
