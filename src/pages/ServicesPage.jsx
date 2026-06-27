@@ -1,8 +1,21 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import {
   BadgeCheck,
+  X,
 } from 'lucide-react';
+
+import bgBranding from '../assets/servicesPage/bg-branding.png';
+import bgOutdoor from '../assets/servicesPage/bg-outdoor.png';
+import bgPrint from '../assets/servicesPage/bg-print.png';
+import bgDigital from '../assets/servicesPage/bg-digital.png';
+import bgSocial from '../assets/servicesPage/bg-social.png';
+import bgWeb from '../assets/servicesPage/bg-web.png';
+import bgProduction from '../assets/servicesPage/bg-production.png';
+import bgRealestate from '../assets/servicesPage/bg-realestate.png';
+import bgEvents from '../assets/servicesPage/bg-events.png';
+import bgCorporate from '../assets/servicesPage/bg-corporate.png';
+import bgStrategy from '../assets/servicesPage/bg-strategy.png';
 
 /* ─── Fade-up variant for scroll reveals ─── */
 const fadeUp = {
@@ -31,17 +44,8 @@ function Reveal({ children, custom = 0, className = '' }) {
   );
 }
 
-const bgBranding = 'https://picsum.photos/seed/branding/600/400';
-const bgOutdoor = 'https://picsum.photos/seed/outdoor/600/400';
-const bgPrint = 'https://picsum.photos/seed/print/600/400';
-const bgDigital = 'https://picsum.photos/seed/digital/600/400';
-const bgSocial = 'https://picsum.photos/seed/social/600/400';
-const bgWeb = 'https://picsum.photos/seed/web/600/400';
-const bgProduction = 'https://picsum.photos/seed/production/600/400';
-const bgRealestate = 'https://picsum.photos/seed/realestate/600/400';
-const bgEvents = 'https://picsum.photos/seed/events/600/400';
-const bgCorporate = 'https://picsum.photos/seed/corporate/600/400';
-const bgStrategy = 'https://picsum.photos/seed/strategy/600/400';
+// No local asset yet for Political & Public Campaigns — swap this for the
+// real image once you have one (and import it the same way as the others above).
 const bgPolitical = 'https://picsum.photos/seed/political/600/400';
 
 /* ─── Services data ─── */
@@ -268,24 +272,23 @@ function isTouchLike() {
   );
 }
 
-/* ─── WorkflowBuilderCard adapted to KANT CSS ─── */
-function ServiceCard({ service, index }) {
+/* ─── ServiceCard — hover preview + click to open full modal ─── */
+function ServiceCard({ service, onOpen }) {
   const [isOpen, setIsOpen] = useState(false);
   const touchDevice = isTouchLike();
   const { bg, title, kicker, description, tags, services, expertise } = service;
 
-  // Pick up to 6 items to show inside the expanded panel
   const detailItems = expertise
     ? [...services.slice(0, 4), ...expertise.slice(0, 2)]
     : services.slice(0, 6);
 
-  const toggleOpen = () => setIsOpen((p) => !p);
   const openOnHover = () => { if (!touchDevice) setIsOpen(true); };
   const closeOnHover = () => { if (!touchDevice) setIsOpen(false); };
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      toggleOpen();
+      onOpen(service);
     }
   };
 
@@ -295,7 +298,7 @@ function ServiceCard({ service, index }) {
       role="button"
       onHoverStart={openOnHover}
       onHoverEnd={closeOnHover}
-      onClick={() => { if (touchDevice) toggleOpen(); }}
+      onClick={() => onOpen(service)}
       onFocus={openOnHover}
       onBlur={closeOnHover}
       onKeyDown={handleKeyDown}
@@ -303,29 +306,28 @@ function ServiceCard({ service, index }) {
       transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
       tabIndex={0}
       aria-expanded={isOpen}
-      aria-label={`${title} service card`}
+      aria-label={`Open ${title} details`}
     >
-      {/* ── Card image area (icon + grid pattern) ── */}
+      {/* ── Card image area ── */}
       <div
-  className="wf-card__media"
-  style={{
-    backgroundImage: `url(${bg})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  }}
->
-  <div className="wf-card__media-overlay" />
-</div>
+        className="wf-card__media"
+        style={{
+          backgroundImage: `url(${bg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="wf-card__media-overlay" />
+      </div>
 
       {/* ── Card body ── */}
       <div className="wf-card__body">
-        {/* Always-visible header */}
         <div className="wf-card__header">
           <h3 className="wf-card__title">{title}</h3>
           <p className="wf-card__kicker">{kicker}</p>
         </div>
 
-        {/* Animated expand: description + service list */}
+        {/* Animated expand: description + service list (hover preview) */}
         <AnimatePresence initial={false}>
           {isOpen && (
             <motion.div
@@ -361,8 +363,131 @@ function ServiceCard({ service, index }) {
   );
 }
 
+/* ─── ServiceModal — full-screen detail view, opened on card click ─── */
+function ServiceModal({ service, onClose }) {
+  const panelRef = useRef(null);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  if (!service) return null;
+
+  const { bg, title, kicker, description, tags, services, expertise } = service;
+  const allItems = expertise ? [...services, ...expertise] : services;
+
+  const handleBackdropClick = (e) => {
+    if (panelRef.current && !panelRef.current.contains(e.target)) {
+      onClose();
+    }
+  };
+
+  return (
+    <motion.div
+      className="svc-modal__backdrop"
+      onMouseDown={handleBackdropClick}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+    >
+      <motion.div
+        className="svc-modal__panel"
+        ref={panelRef}
+        initial={{ opacity: 0, scale: 0.94, y: 24 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ duration: 0.32, ease: [0.25, 1, 0.5, 1] }}
+      >
+        <button
+          type="button"
+          className="svc-modal__close"
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <X size={22} strokeWidth={2.4} />
+        </button>
+
+        <div
+          className="svc-modal__media"
+          style={{
+            backgroundImage: `url(${bg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div className="svc-modal__media-overlay" />
+          <div className="svc-modal__media-content">
+            <span className="svc-modal__kicker">{kicker}</span>
+            <h2 className="svc-modal__title">{title}</h2>
+          </div>
+        </div>
+
+        <div className="svc-modal__body">
+          <p className="svc-modal__desc">{description}</p>
+
+          <div className="svc-modal__tags">
+            {tags.map((tag) => (
+              <span key={tag} className="svc-modal__tag">{tag}</span>
+            ))}
+          </div>
+
+          {expertise ? (
+            <div className="svc-modal__columns">
+              <div>
+                <h4 className="svc-modal__subhead">What We Offer</h4>
+                <ul className="svc-modal__list">
+                  {services.map((item) => (
+                    <li key={item}>
+                      <BadgeCheck size={15} strokeWidth={2.2} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="svc-modal__subhead">Our Expertise</h4>
+                <ul className="svc-modal__list">
+                  {expertise.map((item) => (
+                    <li key={item}>
+                      <BadgeCheck size={15} strokeWidth={2.2} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <ul className="svc-modal__list svc-modal__list--single">
+              {allItems.map((item) => (
+                <li key={item}>
+                  <BadgeCheck size={15} strokeWidth={2.2} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ─── Page ─── */
 export default function ServicesPage() {
+  const [activeService, setActiveService] = useState(null);
+
+  // Lock background scroll while the modal is open
+  useEffect(() => {
+    document.body.style.overflow = activeService ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [activeService]);
+
   return (
     <div className="services-page">
 
@@ -393,17 +518,27 @@ export default function ServicesPage() {
         <div className="container">
           <div className="services-flow-head">
             <span className="section-label accent center">Capabilities</span>
-            <p>Hover a card to explore the details. On mobile, tap to expand.</p>
+            <p>Hover a card to preview. Click any card to see it in full.</p>
           </div>
           <div className="wf-grid">
             {SERVICES.map((service, i) => (
               <Reveal key={service.title} custom={i % 4}>
-                <ServiceCard service={service} index={i} />
+                <ServiceCard service={service} onOpen={setActiveService} />
               </Reveal>
             ))}
           </div>
         </div>
       </section>
+
+      {/* ── FULL-SCREEN SERVICE MODAL ── */}
+      <AnimatePresence>
+        {activeService && (
+          <ServiceModal
+            service={activeService}
+            onClose={() => setActiveService(null)}
+          />
+        )}
+      </AnimatePresence>
 
     </div>
   );
