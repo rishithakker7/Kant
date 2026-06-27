@@ -8,6 +8,19 @@
   background: linear-gradient(135deg, #e5000f 0%, #c4000d 100%);
   padding: 90px 0 80px;
   overflow: hidden;
+  position: relative;
+}
+
+/* Extend hero color above the section so scrolling up never reveals white */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: #e5000f;
+  pointer-events: none;
 }
 
 .hero__inner {
@@ -300,7 +313,7 @@
 @media (max-width: 768px) {
 
   .hero {
-    padding: 120px 0 60px;
+    padding: 110px 0 60px;
   }
 
   .hero__left {
@@ -368,6 +381,19 @@
   padding: 90px 0 80px;
   overflow: hidden;
   position: relative;
+}
+
+/* Extend banner color above the section so scrolling up never reveals white */
+.page-banner--dark::after {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: #0d1117;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .page-banner--dark::before {
@@ -478,6 +504,10 @@
 .about .page-banner--dark {
   background: #ffffff;
   border-bottom: 1px solid var(--color-border);
+}
+
+.about .page-banner--dark::after {
+  background: #ffffff;
 }
 
 .about .page-banner--dark::before {
@@ -2586,7 +2616,7 @@ a.contact-info-item:hover {
   }
 
   .page-banner--dark {
-    padding-top: 104px;
+    padding-top: 110px;
   }
 }
 
