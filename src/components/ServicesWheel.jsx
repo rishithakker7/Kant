@@ -19,52 +19,45 @@ import {
 
 /* ───────────────── DATA ───────────────── */
 
-const services = [
+const RAW_SERVICES = [
   {
     id: 1,
-    number: "01",
     Icon: Newspaper,
     title: "Print Advertising",
     desc: "Newspapers, magazines, classifieds, and display ads with pan-India reach across every major publication.",
   },
   {
     id: 2,
-    number: "02",
     Icon: Radio,
     title: "Radio Advertising",
     desc: "Regional and national radio campaigns crafted to connect, communicate, and convert audiences at scale.",
   },
   {
     id: 3,
-    number: "03",
     Icon: Monitor,
     title: "Digital Advertising",
     desc: "Online campaigns, performance marketing, SEO, and brand visibility built for modern audiences.",
   },
   {
     id: 4,
-    number: "04",
     Icon: MapPin,
     title: "Outdoor Advertising",
     desc: "Hoardings, transit media, and outdoor formats that command attention across key locations.",
   },
   {
     id: 5,
-    number: "05",
     Icon: Tv,
     title: "Television Advertising",
     desc: "Strategic TV media planning and execution that puts your brand in front of millions.",
   },
   {
     id: 6,
-    number: "06",
     Icon: Lightbulb,
     title: "Creative & Strategy",
     desc: "Campaign concepts, messaging, and brand positioning that cut through the noise.",
   },
   {
     id: 7,
-    number: "07",
     Icon: Megaphone,
     title: "Brand Promotions",
     desc: "Activation campaigns and visibility initiatives that build lasting brand equity on the ground.",
@@ -73,12 +66,28 @@ const services = [
 
 /* ───────────────── CONFIG ───────────────── */
 
-const TOTAL = services.length;
+const TOTAL = RAW_SERVICES.length;
+
+// Autoplay always steps backwards through the array index (see the
+// autoplay effect in WheelNav below) so that the wheel itself only ever
+// turns clockwise. That means the *array* order (1,2,3...) is not the
+// order slices actually appear in — index 0 appears first, then index
+// TOTAL-1, TOTAL-2, ...down to 1. We want the on-screen "number" to
+// count 1→7 in that real appearance order, not in raw array order, so
+// it's derived here instead of hardcoded per-service.
+const services = RAW_SERVICES.map((svc, index) => ({
+  ...svc,
+  number: String(((TOTAL - index) % TOTAL) + 1).padStart(2, "0"),
+}));
 const SLICE_ANGLE = 360 / TOTAL; // 51.428...°
 const AUTOPLAY_MS = 3400;
 const ROTATE_DURATION = 0.8;
-// The "focus" position on the wheel — top-right, at 45° from 12 o'clock
-const FOCUS_ANGLE = 45;
+
+// The "focus" slot is a single fixed screen position — whichever service
+// is active always gets rotated into this exact spot, and nothing else
+// is ever highlighted. 90° = due east / the rightmost point of the wheel
+// in this file's angle convention (0 = top, clockwise-positive).
+const FOCUS_ANGLE = 90;
 
 /* ───────────────── HELPERS ───────────────── */
 
@@ -104,17 +113,41 @@ function arcSegmentPath(cx, cy, outerR, innerR, startAngle, endAngle) {
 
 /* ───────────────── CONTENT PANEL ───────────────── */
 
+// Panel transition: the old content leaves first (quick, gentle lift + fade),
+// and only then the new content arrives, with each piece (number → icon →
+// title → description) rising in one after another. AnimatePresence runs in
+// mode="wait" below, so the two panels never overlap on screen — that overlap
+// was what made the old crossfade look like the text was melting together.
+const EASE_OUT = [0.22, 1, 0.36, 1];
+
 const panelVariants = {
-  enter: { opacity: 0, y: 24 },
+  enter: {},
   center: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+    transition: { staggerChildren: 0.075, delayChildren: 0.04 },
   },
   exit: {
     opacity: 0,
-    y: -16,
-    transition: { duration: 0.28, ease: [0.4, 0, 1, 1] },
+    y: -10,
+    transition: { duration: 0.22, ease: [0.4, 0, 1, 1] },
+  },
+};
+
+const itemVariants = {
+  enter: { opacity: 0, y: 18 },
+  center: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: EASE_OUT },
+  },
+};
+
+const iconVariants = {
+  enter: { opacity: 0, y: 18, scale: 0.85 },
+  center: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: EASE_OUT },
   },
 };
 
@@ -129,12 +162,18 @@ function ContentPanel({ service }) {
       animate="center"
       exit="exit"
     >
-      <span className="sw-panel__number">{number}</span>
-      <div className="sw-panel__icon-wrap">
+      <motion.span className="sw-panel__number" variants={itemVariants}>
+        {number}
+      </motion.span>
+      <motion.div className="sw-panel__icon-wrap" variants={iconVariants}>
         <Icon size={40} strokeWidth={1.4} />
-      </div>
-      <h3 className="sw-panel__title">{title}</h3>
-      <p className="sw-panel__desc">{desc}</p>
+      </motion.div>
+      <motion.h3 className="sw-panel__title" variants={itemVariants}>
+        {title}
+      </motion.h3>
+      <motion.p className="sw-panel__desc" variants={itemVariants}>
+        {desc}
+      </motion.p>
     </motion.div>
   );
 }
@@ -147,6 +186,24 @@ function WheelNav({ activeIndex, onSelect }) {
   const wheelRotation = useMotionValue(0);
   const isAnimating = useRef(false);
   const isPaused = useRef(false);
+
+  // Which slice is PHYSICALLY sitting at FOCUS_ANGLE right now. This is
+  // derived straight from the live rotation value (updated every animation
+  // frame), not from which slice was last clicked — so the red highlight
+  // never jumps to a slice before the wheel has actually turned it into
+  // place. The fixed spot itself never moves; only this value changes,
+  // as whichever slice happens to be passing under it changes.
+  const indexAtFocus = useCallback((rotation) => {
+    let designAngle = FOCUS_ANGLE - rotation;
+    designAngle = ((designAngle % 360) + 360) % 360;
+    return Math.floor(designAngle / SLICE_ANGLE) % TOTAL;
+  }, []);
+  const [liveIndex, setLiveIndex] = useState(() => indexAtFocus(0));
+
+  useEffect(() => {
+    setLiveIndex(indexAtFocus(wheelRotation.get()));
+    return wheelRotation.on("change", (v) => setLiveIndex(indexAtFocus(v)));
+  }, [wheelRotation, indexAtFocus]);
 
   const SIZE = 560;
   const CX = SIZE / 2;
@@ -164,33 +221,63 @@ function WheelNav({ activeIndex, onSelect }) {
     []
   );
 
+  // Ref so goTo always reads the CURRENT active index, even when called
+  // from a closure created long ago (like the autoplay interval below).
+  // This is what was making autoplay's rotation look off after the first
+  // tick — it kept computing distance from the wheel's very first
+  // position instead of wherever it had actually rotated to.
+  const activeIndexRef = useRef(activeIndex);
+  useEffect(() => { activeIndexRef.current = activeIndex; }, [activeIndex]);
+
   const goTo = useCallback(
     (next) => {
       if (isAnimating.current) return;
-      isAnimating.current = true;
 
-      const currentTarget = targetRotation(activeIndex);
+      const currentTarget = targetRotation(activeIndexRef.current);
       const nextTarget = targetRotation(next);
 
-      // Calculate shortest delta to avoid spinning backwards unnecessarily
+      // Always rotate clockwise: normalize delta to [0, 360) instead of
+      // picking whichever direction (cw/ccw) is shortest. This still avoids
+      // any *extra* unnecessary spinning — it's the smallest positive
+      // (clockwise) rotation that lands the target slice at FOCUS_ANGLE,
+      // it just never goes negative/counter-clockwise to get there.
       let delta = nextTarget - currentTarget;
-      // Normalize to [-180, 180] so we always take the short arc
-      while (delta > 180) delta -= 360;
-      while (delta < -180) delta += 360;
+      delta = ((delta % 360) + 360) % 360;
 
+      // Clicking the slice that's already active/mid-focus: nothing to
+      // rotate, so don't kick off an animation (or the isAnimating lock)
+      // for a 0° spin.
+      if (delta === 0) return;
+
+      isAnimating.current = true;
       totalRotation.current = totalRotation.current + delta;
 
+      // How many slice-boundaries this rotation crosses — a click one
+      // slice over should feel snappy, but a click across half the wheel
+      // needs more time to read as one continuous spin instead of a
+      // rushed blur. Duration scales with distance instead of being
+      // fixed, and is capped so the longest jump still feels intentional
+      // rather than sluggish.
+      const steps = Math.round(delta / SLICE_ANGLE);
+      const duration = Math.min(1.7, ROTATE_DURATION + (steps - 1) * 0.18);
+
+      // Update the panel immediately, in step with the click/autoplay
+      // tick — not deferred to the rotation's onComplete. Deferring it
+      // sounds nice in theory but races the autoplay timer (which fires
+      // on a fixed interval regardless of how long the current spin
+      // takes), and that race is what left the panel showing stale
+      // content out of step with the wheel. Simple and immediate is correct.
       onSelect(next);
 
       animate(wheelRotation, totalRotation.current, {
-        duration: ROTATE_DURATION,
-        ease: [0.32, 0, 0.18, 1],
+        duration,
+        ease: [0.45, 0, 0.15, 1],
         onComplete: () => {
           isAnimating.current = false;
         },
       });
     },
-    [activeIndex, targetRotation, wheelRotation, onSelect]
+    [targetRotation, wheelRotation, onSelect]
   );
 
   // Init rotation on mount so active=0 is at focus
@@ -201,16 +288,15 @@ function WheelNav({ activeIndex, onSelect }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Keep a ref so the interval callback always sees current activeIndex
-  // without needing to be re-created every rotation
-  const activeIndexRef = useRef(activeIndex);
-  useEffect(() => { activeIndexRef.current = activeIndex; }, [activeIndex]);
-
   // Autoplay — created once, never torn down
   useEffect(() => {
     const id = setInterval(() => {
       if (!isPaused.current) {
-        goTo((activeIndexRef.current + 1) % TOTAL);
+        // Step "backwards" through the index list. Rotation is locked to
+        // clockwise-only, and decrementing the index is what lands as a
+        // short clockwise hop each tick — incrementing would force the
+        // long way around every single time.
+        goTo((activeIndexRef.current - 1 + TOTAL) % TOTAL);
       }
     }, AUTOPLAY_MS);
     return () => clearInterval(id);
@@ -237,7 +323,7 @@ function WheelNav({ activeIndex, onSelect }) {
         style={{ rotate: wheelRotation }}
       >
         {services.map((svc, index) => {
-          const isActive = index === activeIndex;
+          const isActive = index === liveIndex;
           const startAngle = index * SLICE_ANGLE + GAP / 2;
           const endAngle = (index + 1) * SLICE_ANGLE - GAP / 2;
           const midAngle = index * SLICE_ANGLE + SLICE_ANGLE / 2;
@@ -294,7 +380,7 @@ function WheelNav({ activeIndex, onSelect }) {
         {services.map((_, i) => (
           <button
             key={i}
-            className={`sw-dot${i === activeIndex ? " sw-dot--active" : ""}`}
+            className={`sw-dot${i === liveIndex ? " sw-dot--active" : ""}`}
             onClick={() => goTo(i)}
             aria-label={services[i].title}
           />
@@ -383,9 +469,11 @@ export default function ServicesWheel() {
           <WheelNav activeIndex={activeIndex} onSelect={setActiveIndex} />
 
           <div className="sw-panel-wrap">
-            <AnimatePresence mode="wait">
-              <ContentPanel key={activeIndex} service={services[activeIndex]} />
-            </AnimatePresence>
+            <div className="sw-panel-stage">
+              <AnimatePresence mode="wait">
+                <ContentPanel key={activeIndex} service={services[activeIndex]} />
+              </AnimatePresence>
+            </div>
             <Link
               to="/services"
               className="sw-panel__cta sw-panel__cta--static"

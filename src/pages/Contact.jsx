@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Phone, Mail, Globe, MapPin, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
+import LiquidButton, { LiquidGlassFilter } from '../components/LiquidButton.jsx';
 
 /* ════════════════════════════════════════════════════════════════
    EMAIL CONFIG
@@ -110,6 +111,9 @@ export default function Contact() {
   return (
     <div className="contact-page">
 
+      {/* Shared SVG filter used by the liquid glass button (renders nothing visible) */}
+      <LiquidGlassFilter />
+
       {/* ── PAGE BANNER ──────────────────────────── */}
       <section className="page-banner page-banner--dark">
         <div className="container page-banner__inner page-banner__inner--center">
@@ -187,16 +191,13 @@ export default function Contact() {
               />
             </div>
 
-            <motion.button
-              className="btn btn--accent"
+            <LiquidButton
+              variant="accent"
               onClick={handleSubmit}
               disabled={sending}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.2 }}
             >
               {sending ? 'SENDING…' : 'SEND MESSAGE'} <Send size={15} strokeWidth={2.4} />
-            </motion.button>
+            </LiquidButton>
 
             <AnimatePresence>
               {error && (

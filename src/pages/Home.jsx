@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, animate } from "framer-motion";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
+import heroVideo from "../assets/hero-video.mp4";
+import heroPoster from "../assets/keyframe.jpg";
 import {
   Calendar,
   RefreshCw,
@@ -11,6 +12,7 @@ import {
   Megaphone,
 } from "lucide-react";
 import ServicesWheel from "../components/ServicesWheel.jsx";
+import LiquidButton, { LiquidGlassFilter } from "../components/LiquidButton.jsx";
 
 /* ───────────────── ANIMATIONS ───────────────── */
 
@@ -98,23 +100,54 @@ const stats = [
 /* ───────────────── COMPONENT ───────────────── */
 
 export default function Home() {
+  const videoRef = useRef(null);
+
+  // Some browsers (notably iOS Safari) ignore the React `muted` prop for
+  // autoplay purposes, so set it on the element directly and nudge play().
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.defaultMuted = true;
+    const p = v.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  }, []);
+
   return (
     <div className="home">
 
-      {/* HERO */}
+      {/* HERO — looping background video with CTAs layered on top */}
       <section className="hero">
+        <video
+          ref={videoRef}
+          className="hero__video"
+          src={heroVideo}
+          poster={heroPoster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
+        <div className="hero__overlay" aria-hidden="true" />
+
+        {/* Shared SVG filter used by the liquid glass buttons (renders nothing visible) */}
+        <LiquidGlassFilter />
+
         <div className="container hero__inner">
-          <div className="hero__left">
-            <h1 className="hero__headline">
-              KILLER <br />ADS.<br />NO<br />TIMEPASS.
+          <div className="hero__content">
+            <h1 className="visually-hidden">
+              KANT Advertising: Advertising Agency in Mulund, Thane &amp; Mumbai
             </h1>
             <div className="hero__cta-group">
-              <Link to="/services" className="hero__cta">EXPLORE SERVICES →</Link>
-              <Link to="/contact" className="hero__cta hero__cta--outline">CONTACT US →</Link>
+              <LiquidButton as={Link} to="/services" variant="primary">
+                EXPLORE SERVICES →
+              </LiquidButton>
+              <LiquidButton as={Link} to="/contact" variant="glass">
+                CONTACT US →
+              </LiquidButton>
             </div>
-          </div>
-          <div className="hero__brand">
-            <img src={logo} alt="KANT Logo" className="hero__logo" />
           </div>
         </div>
       </section>

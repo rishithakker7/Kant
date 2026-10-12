@@ -5,17 +5,17 @@ import {
   X,
 } from 'lucide-react';
 
-import bgBranding from '../assets/servicesPage/bg-branding.png';
-import bgOutdoor from '../assets/servicesPage/bg-outdoor.png';
-import bgPrint from '../assets/servicesPage/bg-print.png';
-import bgDigital from '../assets/servicesPage/bg-digital.png';
-import bgSocial from '../assets/servicesPage/bg-social.png';
-import bgWeb from '../assets/servicesPage/bg-web.png';
-import bgProduction from '../assets/servicesPage/bg-production.png';
-import bgRealestate from '../assets/servicesPage/bg-realestate.png';
-import bgEvents from '../assets/servicesPage/bg-events.png';
-import bgCorporate from '../assets/servicesPage/bg-corporate.png';
-import bgStrategy from '../assets/servicesPage/bg-strategy.png';
+import bgBranding from '../assets/servicesPage/bg-branding.jpg';
+import bgOutdoor from '../assets/servicesPage/bg-outdoor.jpg';
+import bgPrint from '../assets/servicesPage/bg-print.jpg';
+import bgDigital from '../assets/servicesPage/bg-digital.jpg';
+import bgSocial from '../assets/servicesPage/bg-social.jpg';
+import bgWeb from '../assets/servicesPage/bg-web.jpg';
+import bgProduction from '../assets/servicesPage/bg-production.jpg';
+import bgRealestate from '../assets/servicesPage/bg-realestate.jpg';
+import bgEvents from '../assets/servicesPage/bg-events.jpg';
+import bgCorporate from '../assets/servicesPage/bg-corporate.jpg';
+import bgStrategy from '../assets/servicesPage/bg-strategy.jpg';
 
 /* ─── Fade-up variant for scroll reveals ─── */
 const fadeUp = {

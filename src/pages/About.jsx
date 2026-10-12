@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, Target, CheckCircle } from 'lucide-react';
-import logo from '../assets/black-logo.png';
+import logo from '../assets/logos/kant-red-n-black.png';
 import storyVisual from '../assets/four decades.png';
 
 const VM_CARDS = [
@@ -173,7 +173,7 @@ export default function About() {
         <div className="container about-story">
           <div className="about-story__left">
             <span className="section-label accent">Our Story</span>
-            <h2>Four Decades<br />of Impact</h2>
+            <h2>44 Years<br />of Impact</h2>
             <p>
               Established in 1982, KANT Advertising is a trusted advertising agency in India with
               a strong foundation in print media and integrated communication solutions. What began
