@@ -6,6 +6,9 @@ import { useLocation } from 'react-router-dom';
    Rendered once inside Layout.jsx. It watches the
    route and updates the <head> for each page.
    To change any page's wording, edit PAGES below.
+
+   NOTE: The '/' entry must stay identical to the
+   <title> and <meta name="description"> in index.html.
    ============================================ */
 
 const SITE_URL = 'https://kantadvertising.com';
@@ -14,7 +17,7 @@ const PAGES = {
   '/': {
     title: 'KANT Advertising | Advertising Agency in Mulund, Thane & Mumbai',
     description:
-      'Full-service advertising agency in Mulund, Mumbai since 1982. Print, outdoor, digital, radio, TV and production for brands across Mumbai and India.',
+      'Full-service advertising agency in Mulund, Mumbai since 1982. Print, outdoor, digital and radio for brands across Mumbai and India.',
   },
   '/about': {
     title: 'About KANT Advertising | Mulund Ad Agency Since 1982',
@@ -57,6 +60,8 @@ export default function Seo() {
     setTag('meta', 'property', 'og:title', 'content', page.title);
     setTag('meta', 'property', 'og:description', 'content', page.description);
     setTag('meta', 'property', 'og:url', 'content', url);
+    setTag('meta', 'name', 'twitter:title', 'content', page.title);
+    setTag('meta', 'name', 'twitter:description', 'content', page.description);
   }, [pathname]);
 
   return null;
