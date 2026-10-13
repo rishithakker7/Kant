@@ -93,7 +93,7 @@ const SERVICES = [
   {
     bg: bgPrint,
     title: 'Print Advertising',
-    kicker: 'Four decades of print media expertise.',
+    kicker: 'Over 44+ years of Media Experience',
     description:
       'Print advertising is not just a medium for us — it is a discipline we understand deeply. Our nationwide media relationships help deliver impactful, cost-efficient campaigns.',
     tags: ['Newspapers', 'Magazines', 'Pan-India'],
@@ -508,7 +508,7 @@ export default function ServicesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.55 }}
           >
-            Integrated advertising, branding, marketing, media, and communication solutions.
+            Integrated advertising, branding, marketing, media and communication solutions.
           </motion.p>
         </div>
       </section>

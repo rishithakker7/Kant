@@ -16,6 +16,7 @@ import {
   Megaphone,
   ArrowRight,
 } from "lucide-react";
+import LiquidButton, { LiquidGlassFilter } from "./LiquidButton.jsx";
 
 /* ───────────────── DATA ───────────────── */
 
@@ -24,7 +25,7 @@ const RAW_SERVICES = [
     id: 1,
     Icon: Newspaper,
     title: "Print Advertising",
-    desc: "Newspapers, magazines, classifieds, and display ads with pan-India reach across every major publication.",
+    desc: "Newspapers, magazines, classifieds and display ads with pan-India reach across every major publication.",
   },
   {
     id: 2,
@@ -36,13 +37,13 @@ const RAW_SERVICES = [
     id: 3,
     Icon: Monitor,
     title: "Digital Advertising",
-    desc: "Online campaigns, performance marketing, SEO, and brand visibility built for modern audiences.",
+    desc: "Online campaigns, performance marketing, SEO and brand visibility built for modern audiences.",
   },
   {
     id: 4,
     Icon: MapPin,
     title: "Outdoor Advertising",
-    desc: "Hoardings, transit media, and outdoor formats that command attention across key locations.",
+    desc: "Hoardings, transit media and outdoor formats that command attention across key locations.",
   },
   {
     id: 5,
@@ -54,7 +55,7 @@ const RAW_SERVICES = [
     id: 6,
     Icon: Lightbulb,
     title: "Creative & Strategy",
-    desc: "Campaign concepts, messaging, and brand positioning that cut through the noise.",
+    desc: "Campaign concepts, messaging and brand positioning that cut through the noise.",
   },
   {
     id: 7,
@@ -68,19 +69,11 @@ const RAW_SERVICES = [
 
 const TOTAL = RAW_SERVICES.length;
 
-// Autoplay always steps backwards through the array index (see the
-// autoplay effect in WheelNav below) so that the wheel itself only ever
-// turns clockwise. That means the *array* order (1,2,3...) is not the
-// order slices actually appear in — index 0 appears first, then index
-// TOTAL-1, TOTAL-2, ...down to 1. We want the on-screen "number" to
-// count 1→7 in that real appearance order, not in raw array order, so
-// it's derived here instead of hardcoded per-service.
 const services = RAW_SERVICES.map((svc, index) => ({
   ...svc,
   number: String(((TOTAL - index) % TOTAL) + 1).padStart(2, "0"),
 }));
 const SLICE_ANGLE = 360 / TOTAL; // 51.428...°
-const AUTOPLAY_MS = 3400;
 const ROTATE_DURATION = 0.8;
 
 // The "focus" slot is a single fixed screen position — whichever service
@@ -178,6 +171,25 @@ function ContentPanel({ service }) {
   );
 }
 
+/* Invisible copy of a panel. One of these is rendered for EVERY service
+   inside the stage, stacked on top of each other, so the stage is always
+   exactly as tall as the tallest panel (at whatever screen width it is).
+   That keeps the button right under the text with no guessed pixel
+   height, no jumping between services, and no overlap on mobile. */
+function PanelSizer({ service }) {
+  const { Icon, number, title, desc } = service;
+  return (
+    <div className="sw-panel sw-panel--sizer" aria-hidden="true">
+      <span className="sw-panel__number">{number}</span>
+      <div className="sw-panel__icon-wrap">
+        <Icon size={40} strokeWidth={1.4} />
+      </div>
+      <h3 className="sw-panel__title">{title}</h3>
+      <p className="sw-panel__desc">{desc}</p>
+    </div>
+  );
+}
+
 /* ───────────────── WHEEL NAV ───────────────── */
 
 function WheelNav({ activeIndex, onSelect }) {
@@ -185,7 +197,6 @@ function WheelNav({ activeIndex, onSelect }) {
   const totalRotation = useRef(0);
   const wheelRotation = useMotionValue(0);
   const isAnimating = useRef(false);
-  const isPaused = useRef(false);
 
   // Which slice is PHYSICALLY sitting at FOCUS_ANGLE right now. This is
   // derived straight from the live rotation value (updated every animation
@@ -288,27 +299,8 @@ function WheelNav({ activeIndex, onSelect }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Autoplay — created once, never torn down
-  useEffect(() => {
-    const id = setInterval(() => {
-      if (!isPaused.current) {
-        // Step "backwards" through the index list. Rotation is locked to
-        // clockwise-only, and decrementing the index is what lands as a
-        // short clockwise hop each tick — incrementing would force the
-        // long way around every single time.
-        goTo((activeIndexRef.current - 1 + TOTAL) % TOTAL);
-      }
-    }, AUTOPLAY_MS);
-    return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
-    <div
-      className="sw-wheel"
-      onMouseEnter={() => (isPaused.current = true)}
-      onMouseLeave={() => (isPaused.current = false)}
-    >
+    <div className="sw-wheel">
       {/* Static center hub — NOT inside the rotating SVG */}
       <div className="sw-wheel__hub">
         <span className="sw-wheel__hub-degrees">360°</span>
@@ -458,6 +450,9 @@ export default function ServicesWheel() {
 
   return (
     <section className="sw-section">
+      {/* Shared SVG filter used by the liquid glass button (renders nothing visible) */}
+      <LiquidGlassFilter />
+
       <div className="sw-section__inner">
         <div className="sw-section__heading">
           <span className="section-label accent center">Our Services</span>
@@ -470,18 +465,26 @@ export default function ServicesWheel() {
 
           <div className="sw-panel-wrap">
             <div className="sw-panel-stage">
+              {services.map((svc) => (
+                <PanelSizer key={svc.id} service={svc} />
+              ))}
               <AnimatePresence mode="wait">
                 <ContentPanel key={activeIndex} service={services[activeIndex]} />
               </AnimatePresence>
             </div>
-            <Link
-              to="/services"
-              className="sw-panel__cta sw-panel__cta--static"
-              onClick={() => window.scrollTo(0, 0)}
-            >
-              Explore All Services
-              <ArrowRight size={16} strokeWidth={2} />
-            </Link>
+
+            <div className="sw-cta-row">
+              <LiquidButton
+                as={Link}
+                to="/services"
+                variant="accent"
+                className="sw-cta"
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                Explore All Services
+                <ArrowRight size={16} strokeWidth={2.4} />
+              </LiquidButton>
+            </div>
           </div>
         </div>
       </div>

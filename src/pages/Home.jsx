@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, animate } from "framer-motion";
-import { Link } from "react-router-dom";
 import heroVideo from "../assets/hero-video.mp4";
 import heroPoster from "../assets/keyframe.jpg";
 import {
@@ -12,7 +11,6 @@ import {
   Megaphone,
 } from "lucide-react";
 import ServicesWheel from "../components/ServicesWheel.jsx";
-import LiquidButton, { LiquidGlassFilter } from "../components/LiquidButton.jsx";
 
 /* ───────────────── ANIMATIONS ───────────────── */
 
@@ -84,7 +82,7 @@ function Counter({ to, suffix = "" }) {
 
 const highlights = [
   { Icon: Calendar,  label: "Established\nin 1982" },
-  { Icon: RefreshCw, label: "4+ Decades of\nExperience" },
+  { Icon: RefreshCw, label: "44 Years of\nExperience" },
   { Icon: Map,       label: "Pan-India Print\nExpertise" },
   { is360: true,     label: "Advertising\nSolutions" },
   { Icon: Zap,       label: "Prompt Service,\nEvery Time" },
@@ -93,7 +91,7 @@ const highlights = [
 
 const stats = [
   { to: "1000", suffix: "+",  label: "Happy\nClients" },
-  { to: "40",   suffix: "+",  label: "Years of\nExcellence" },
+  { to: "44",   suffix: "+",  label: "Years of\nExperience" },
   { to: "90",   suffix: "%+", label: "Client\nRetention" },
 ];
 
@@ -116,7 +114,7 @@ export default function Home() {
   return (
     <div className="home">
 
-      {/* HERO — looping background video with CTAs layered on top */}
+      {/* HERO — looping background video */}
       <section className="hero">
         <video
           ref={videoRef}
@@ -132,22 +130,11 @@ export default function Home() {
         />
         <div className="hero__overlay" aria-hidden="true" />
 
-        {/* Shared SVG filter used by the liquid glass buttons (renders nothing visible) */}
-        <LiquidGlassFilter />
-
         <div className="container hero__inner">
           <div className="hero__content">
             <h1 className="visually-hidden">
               KANT Advertising: Advertising Agency in Mulund, Thane &amp; Mumbai
             </h1>
-            <div className="hero__cta-group">
-              <LiquidButton as={Link} to="/services" variant="primary">
-                EXPLORE SERVICES →
-              </LiquidButton>
-              <LiquidButton as={Link} to="/contact" variant="glass">
-                CONTACT US →
-              </LiquidButton>
-            </div>
           </div>
         </div>
       </section>

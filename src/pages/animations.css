@@ -214,9 +214,9 @@
 
 /* ── MOBILE HERO — horizontal video block ─────────────────
    On phones the video is NOT full-screen. It becomes a wide banner
-   at the top (the floating nav pill sits over its top edge), and the
-   two buttons drop onto the dark strip underneath so they never cover
-   the logo in the video.
+   at the top (the floating nav pill sits over its top edge).
+   There is no strip underneath any more — the hero ends exactly
+   where the video ends.
 
    Tune it here:
    • --hero-m-extra  → extra height on top of 16:9 (room for the nav pill)
@@ -227,7 +227,7 @@
     --hero-m-extra: 64px;
     display: block;
     min-height: 0;
-    padding: 0 0 28px;
+    padding: 0;
     background: #0d1117;
   }
 
@@ -241,21 +241,13 @@
     object-position: center center;
   }
 
-  /* The dark gradient was only there to help buttons read over the video */
   .hero__overlay {
     display: none;
   }
 
+  /* Only holds the visually-hidden <h1> now — no space needed */
   .hero__inner {
-    padding-top: 22px;
-  }
-
-  .hero__cta-group {
-    width: 100%;
-    max-width: 420px;
-    margin-inline: auto;
-    margin-top: 0;
-    gap: 12px;
+    padding: 0;
   }
 }
 
@@ -605,4 +597,70 @@ a.footer__contact-item:hover {
 .footer__social:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
+}
+
+
+/* ============================================
+   HOME — SERVICES WHEEL: "EXPLORE ALL SERVICES"
+   Liquid glass button + tighter, aligned spacing.
+   Loads after pages.css, so these override the old
+   .sw-panel__cta / stage rules there (now unused).
+   ============================================ */
+
+/* Stage is as tall as the tallest panel (see PanelSizer in
+   ServicesWheel.jsx) instead of a fixed 300px. */
+.sw-panel-stage {
+  display: grid;
+  min-height: 0;
+}
+
+.sw-panel--sizer {
+  position: relative;
+  grid-area: 1 / 1;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Spacing is now handled by the row gap below, not the description */
+.sw-panel__desc {
+  margin-bottom: 0;
+}
+
+.sw-panel-wrap {
+  gap: 28px;
+}
+
+/* Button row lines up with the panel text (the panel has 8px side padding) */
+.sw-cta-row {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0 8px;
+}
+
+@media (max-width: 860px) {
+  .sw-cta-row {
+    justify-content: center;
+    padding: 0;
+  }
+
+  /* keep the panel text centred over the centred button on tablets */
+  .sw-panel {
+    margin-inline: auto;
+  }
+}
+
+/* Very narrow phones: base rule makes liquid buttons full width —
+   keep this one sized to its text instead */
+@media (max-width: 400px) {
+  .liquid-btn.sw-cta {
+    width: auto;
+    max-width: 100%;
+    padding: 0 22px;
+  }
+
+  .liquid-btn.sw-cta .liquid-btn__label {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
 }

@@ -60,8 +60,8 @@ function Reveal({ children, custom = 0, className = '' }) {
 }
 
 const CONTACT_DETAILS = [
-  { Icon: Phone, value: '96190 26661', href: 'tel:+919619026661' },
-  { Icon: Mail, value: 'manish@kantadvertising.com', href: 'mailto:manish@kantadvertising.com' },
+  { Icon: Phone, value: '+91 9152 833 833', href: 'tel:+919152833833' },
+  { Icon: Mail, value: 'marketing@kantadvertising.com', href: 'mailto:marketing@kantadvertising.com' },
   { Icon: Globe, value: 'kantadvertising.com', href: 'https://kantadvertising.com' },
 ];
 
@@ -252,7 +252,7 @@ export default function Contact() {
                 <span>
                   819, 8th floor, Ecstasy Business Park,<br />
                   JSD Road, Near City of Joy,<br />
-                  Mulund (West), Mumbai – 400080. INDIA.
+                  Mulund (West), Mumbai – 400 080. INDIA.
                 </span>
               </div>
             </div>

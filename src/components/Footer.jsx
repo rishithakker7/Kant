@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin } from 'lucide-react';
-import logo from '../assets/logos/kant-red-n-black.png';
+import logo from '../assets/logos/kant-blue-n-red.png';
 import instagramIcon from '../assets/icons/instagram.svg';
 import facebookIcon from '../assets/icons/facebook.svg';
 import whatsappIcon from '../assets/icons/whatsapp.svg';
@@ -42,7 +42,7 @@ export default function Footer() {
           <img src={logo} alt="KANT Advertising" className="footer__logo" />
           <p className="footer__tagline">
             Full-service advertising agency in Mulund, Mumbai. Print, outdoor,
-            digital and more, since 1982.
+            digital and more since 1982.
           </p>
         </div>
 
@@ -81,20 +81,20 @@ export default function Footer() {
         {/* Contact */}
         <address className="footer__col footer__contact">
           <h4 className="footer__heading">Contact</h4>
-          <a href="tel:+919619026661" className="footer__contact-item">
+          <a href="tel:+919152833833" className="footer__contact-item">
             <Phone size={16} strokeWidth={2} />
-            <span>96190 26661</span>
+            <span>+91 9152 833 833</span>
           </a>
-          <a href="mailto:manish@kantadvertising.com" className="footer__contact-item">
+          <a href="mailto:marketing@kantadvertising.com" className="footer__contact-item">
             <Mail size={16} strokeWidth={2} />
-            <span>manish@kantadvertising.com</span>
+            <span>marketing@kantadvertising.com</span>
           </a>
           <div className="footer__contact-item">
             <MapPin size={16} strokeWidth={2} />
             <span>
               819, 8th floor, Ecstasy Business Park,<br />
               JSD Road, Near City of Joy,<br />
-              Mulund (West), Mumbai – 400080
+              Mulund (West), Mumbai – 400 080. INDIA.
             </span>
           </div>
         </address>
@@ -105,7 +105,7 @@ export default function Footer() {
           © {year} KANT Advertising. All rights reserved.
         </p>
         <p className="footer__copy">
-          Serving Mulund, Thane &amp; all of Mumbai
+          Office in Mumbai, serving all over INDIA.
         </p>
       </div>
     </footer>

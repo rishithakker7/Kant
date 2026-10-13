@@ -14,7 +14,7 @@ const PAGES = {
   '/': {
     title: 'KANT Advertising | Advertising Agency in Mulund, Thane & Mumbai',
     description:
-      'Full-service advertising agency in Mulund, Mumbai since 1982. Print, outdoor, digital, radio, TV and production for brands across Mulund, Thane and Mumbai.',
+      'Full-service advertising agency in Mulund, Mumbai since 1982. Print, outdoor, digital, radio, TV and production for brands across Mumbai and India.',
   },
   '/about': {
     title: 'About KANT Advertising | Mulund Ad Agency Since 1982',
@@ -29,7 +29,7 @@ const PAGES = {
   '/contact': {
     title: 'Contact KANT Advertising | Mulund West, Mumbai',
     description:
-      'Contact KANT Advertising at Ecstasy Business Park, JSD Road, Mulund West, Mumbai 400080. Call 96190 26661 or send us a message.',
+      'Contact KANT Advertising at Ecstasy Business Park, JSD Road, Mulund West, Mumbai 400080. Call +91 9152 833 833 or send us a message.',
   },
 };
 
